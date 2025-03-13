@@ -1,0 +1,107 @@
+[
+  {
+    "ContainingType": "EmployeeController",
+    "Method": "GetEmployee",
+    "RelativePath": "api/Employee/{empCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "empCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeController",
+    "Method": "GetEmployeesByStatus",
+    "RelativePath": "api/Employee/active_emp",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeController",
+    "Method": "GetAttendanceByEmpCode",
+    "RelativePath": "api/Employee/attendance/{empCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "empCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "fromDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "toDate",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeController",
+    "Method": "GetActiveEmployeesAttendance",
+    "RelativePath": "api/Employee/attendance/active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fromDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "toDate",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeController",
+    "Method": "InsertEmployeePurchase",
+    "RelativePath": "api/Employee/pos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "empPosList",
+        "Type": "System.Collections.Generic.List\u00601[[EmployeeController\u002BEmpPosDto, EmployeeApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-API-KEY",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

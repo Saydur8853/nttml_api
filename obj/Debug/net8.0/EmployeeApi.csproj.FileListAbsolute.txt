@@ -88,4 +88,5 @@ D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\refint\EmployeeApi.dll
 D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\EmployeeApi.pdb
 D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\EmployeeApi.genruntimeconfig.cache
 D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\ref\EmployeeApi.dll
+D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\EmployeeApi.sourcelink.json
 D:\SOURCE_CODE\EmployeeApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

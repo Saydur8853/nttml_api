@@ -90,3 +90,4 @@ D:\SOURCE_CODE\EmployeeApi\obj\Release\net8.0\refint\EmployeeApi.dll
 D:\SOURCE_CODE\EmployeeApi\obj\Release\net8.0\EmployeeApi.pdb
 D:\SOURCE_CODE\EmployeeApi\obj\Release\net8.0\EmployeeApi.genruntimeconfig.cache
 D:\SOURCE_CODE\EmployeeApi\obj\Release\net8.0\ref\EmployeeApi.dll
+D:\SOURCE_CODE\EmployeeApi\obj\Release\net8.0\EmployeeApi.sourcelink.json

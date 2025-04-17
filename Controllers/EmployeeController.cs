@@ -243,52 +243,67 @@ public class EmployeeController : ControllerBase
     }
 
 
-    //[HttpPost("pos/")]
-    //public IActionResult InsertEmployeePurchase(
-    //[FromBody] List<EmpPosDto> empPosList,
-    //[FromHeader(Name = "X-API-KEY")] string apiKey)
-    //{
-    //    const string validApiKey = "TOKWt9Y8QuDsUOFS2qlWro0h9ceJL4zO"; 
+    [HttpGet("summary/{empCode}")]
+    public IActionResult GetEmployeeAttendanceSummary(string empCode)
+    {
+        var summary = new Dictionary<string, object>();
 
-    //    if (apiKey != validApiKey)
-    //    {
-    //        return Unauthorized(new { message = "Invalid API Key" });
-    //    }
+        using (var connection = new OracleConnection(_connectionString))
+        {
+            string query = @"
+            SELECT 
+                E_O.EMP_CODE,
+                E_O.EMP_NAME,
+                E_O.EMP_STATUS,
+                TO_CHAR(E_O.DATE_OF_JOINING, 'DD-MON-YYYY') AS DATE_OF_JOINING,
+                E_C.EMP_CATEGORY_NAME AS EMP_TYPE,
+                ROUND(DECODE(S_R.RULE_BASIC, 50, E_O.GROSS / 2, 
+                    ((E_O.GROSS - (S_R.RULE_TRANSPORT + S_R.RULE_MEDICAL + S_R.RULE_FOOD)) / 1.55)), 0) AS BASIC,
+                E_O.GROSS,
+                NVL((
+                    SELECT COUNT(*) 
+                    FROM ATTENDANCE_DETAILS A
+                    WHERE A.EMP_ID = E_O.EMP_ID
+                    AND TO_CHAR(A.ATTD_DATE, 'MM-YYYY') = TO_CHAR(SYSDATE, 'MM-YYYY')
+                    AND UPPER(A.STATUS) = 'P'
+                ), 0) AS TOTAL_PRESENT_DAYS,
+                '01-' || INITCAP(TO_CHAR(SYSDATE, 'MON')) || '-' || TO_CHAR(SYSDATE, 'YYYY') || ' to ' || TO_CHAR(SYSDATE, 'DD-') || INITCAP(TO_CHAR(SYSDATE, 'MON')) || '-' || TO_CHAR(SYSDATE, 'YYYY') AS ATTENDANCE_MONTH
 
-    //    using (var connection = new OracleConnection(_connectionString))
-    //    {
-    //        connection.Open();
-    //        using (var transaction = connection.BeginTransaction())
-    //        {
-    //            try
-    //            {
-    //                string query = @"
-    //            INSERT INTO EMP_POS (EMP_CODE, AMOUNT, PURCHASE_DATE)
-    //            VALUES (:empCode, :amount, TO_DATE(:purchaseDate, 'YYYY-MM-DD'))";
+            FROM EMP_OFFICIAL E_O
+            LEFT JOIN EMP_CATEGORY E_C ON E_O.EMP_CATEGORY_ID = E_C.EMP_CATEGORY_ID
+            LEFT JOIN SALARY_RULE_INFO S_R ON E_O.RULE_ID = S_R.RULE_ID
+            WHERE E_O.EMP_CODE = :empCode";
 
-    //                foreach (var empPos in empPosList)
-    //                {
-    //                    using (var command = new OracleCommand(query, connection))
-    //                    {
-    //                        command.Parameters.Add(new OracleParameter("empCode", empPos.EMP_CODE));
-    //                        command.Parameters.Add(new OracleParameter("amount", empPos.AMOUNT));
-    //                        command.Parameters.Add(new OracleParameter("purchaseDate", empPos.PURCHASE_DATE.ToString("yyyy-MM-dd")));
 
-    //                        command.ExecuteNonQuery();
-    //                    }
-    //                }
 
-    //                transaction.Commit();
-    //                return Ok(new { message = "Employee purchase records inserted successfully." });
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                transaction.Rollback();
-    //                return StatusCode(500, new { message = "An error occurred while inserting records.", error = ex.Message });
-    //            }
-    //        }
-    //    }
-    //}
+
+            using (var command = new OracleCommand(query, connection))
+            {
+                command.Parameters.Add(new OracleParameter("empCode", empCode));
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            summary[reader.GetName(i)] = reader[i];
+                        }
+                    }
+                    else
+                    {
+                        return NotFound(new { message = false });
+                    }
+                }
+            }
+        }
+
+        return Ok(summary);
+    }
+
+
+
     [HttpPost("pos/")]
     public IActionResult InsertEmployeePurchase(
     [FromBody] List<EmpPosDto> empPosList,

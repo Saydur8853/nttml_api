@@ -7,8 +7,8 @@ using System.Data;
 [Route("api/[controller]")]
 public class EmployeeController : ControllerBase
 {
-    //private readonly string _connectionString = "User Id=NG_NTTML;Password=NGI_NTTML;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=103.4.116.121)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
-    private readonly string _connectionString = "User Id=NG_TFL;Password=NGI_TFL;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=103.4.116.121)(PORT=1522)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
+    private readonly string _connectionString = "User Id=NG_NTTML;Password=NGI_NTTML;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=103.4.116.121)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
+    //private readonly string _connectionString = "User Id=NG_TFL;Password=NGI_TFL;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=103.4.116.121)(PORT=1522)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
 
     [HttpGet("{empCode}")]
     public IActionResult GetEmployee(string empCode)
@@ -19,7 +19,10 @@ public class EmployeeController : ControllerBase
                 SELECT E_O.EMP_ID, E_O.EMP_CODE, E_O.ERP_CODE, E_O.EMP_NAME, 
                        D.DESIGNATION_NAME, DP.DEPARTMENT_NAME, SEC.SECTION_NAME, 
                        F.FLOOR_NAME, E_C.EMP_CATEGORY_NAME, 
-                       E_P.SEX AS GENDER, E_P.NATIONAL_ID,
+                       E_P.SEX AS GENDER, E_P.NATIONAL_ID,CASE 
+                            WHEN E_P.E_MAIL IS NULL OR TRIM(E_P.E_MAIL) = '' THEN E_P.CONTACT_NO 
+                            ELSE E_P.E_MAIL 
+                    END AS Mobile_No,
                        E_O.DATE_OF_JOINING, 
                        ROUND(DECODE(S_R.RULE_BASIC, 50, E_O.GROSS / 2, 
                             ((E_O.GROSS - (S_R.RULE_TRANSPORT + S_R.RULE_MEDICAL + S_R.RULE_FOOD)) / 1.55))
@@ -73,7 +76,10 @@ public class EmployeeController : ControllerBase
                     SELECT E_O.EMP_ID, E_O.EMP_CODE, E_O.ERP_CODE, E_O.EMP_NAME, 
                            D.DESIGNATION_NAME, DP.DEPARTMENT_NAME, SEC.SECTION_NAME, 
                            F.FLOOR_NAME, E_C.EMP_CATEGORY_NAME, 
-                           E_P.SEX AS GENDER, E_P.NATIONAL_ID,
+                           E_P.SEX AS GENDER, E_P.NATIONAL_ID,CASE 
+                               WHEN E_P.E_MAIL IS NULL OR TRIM(E_P.E_MAIL) = '' THEN E_P.CONTACT_NO 
+                               ELSE E_P.E_MAIL 
+                           END AS Mobile_No,
                            E_O.DATE_OF_JOINING, 
                            ROUND(DECODE(S_R.RULE_BASIC, 50, E_O.GROSS / 2, 
                                 ((E_O.GROSS - (S_R.RULE_TRANSPORT + S_R.RULE_MEDICAL + S_R.RULE_FOOD)) / 1.55))
@@ -333,11 +339,11 @@ public class EmployeeController : ControllerBase
                     foreach (var empPos in empPosList)
                     {
                         // Skip if amount is zero
-                        if (empPos.AMOUNT == 0)
-                        {
-                            skippedRecords.Add($"EMP_CODE: {empPos.EMP_CODE} skipped (Amount is 0)");
-                            continue;
-                        }
+                        //if (empPos.AMOUNT == 0)
+                        //{
+                        //    skippedRecords.Add($"EMP_CODE: {empPos.EMP_CODE} skipped (Amount is 0)");
+                        //    continue;
+                        //}
 
                         // Check if EMP_CODE exists in the Emp_official table
                         using (var checkCommand = new OracleCommand("SELECT COUNT(*) FROM Emp_official WHERE EMP_CODE = :empCode", connection))

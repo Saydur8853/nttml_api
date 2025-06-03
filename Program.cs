@@ -13,8 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>  
 {
-    //c.SwaggerDoc("v1", new OpenApiInfo { Title = "NTTML API ", Version = "v1" });
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TFL API ", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "NTTML API ", Version = "v1" });
+    //c.SwaggerDoc("v1", new OpenApiInfo { Title = "TFL API ", Version = "v1" });
 });
 builder.Services.AddAuthorization();  
 
@@ -27,16 +27,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();        
     app.UseSwaggerUI(c =>
     {
-        //c.SwaggerEndpoint("/swagger/v1/swagger.json", "NTTML API v1");
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TFL API v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "NTTML API v1");
+        //c.SwaggerEndpoint("/swagger/v1/swagger.json", "TFL API v1");
     });
 }
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "NTTML API v1");
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TFL API v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "NTTML API v1");
+    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "TFL API v1");
 });
 
 app.UseAuthorization();
